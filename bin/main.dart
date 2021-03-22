@@ -2,7 +2,7 @@ import 'dart:io';
 import 'media_gallery.dart';
 import 'messenger.dart';
 
-void main(List<String> arguments) async {
+void main() async {
   MediaGallery mediaGallery = MediaGallery();
   Messenger messenger = Messenger();
   bool repeat = true;

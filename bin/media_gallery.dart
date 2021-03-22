@@ -12,14 +12,7 @@ class MediaGallery {
   final List<JpgImage> jpgList = [];
 
   void getFilesFromPath(String path) async {
-    if (await FileSystemEntity.isFile(path)) {
-      stderr.writeln('error: $path is a file, please provide a directory');
-    } else {
-      exitCode = 2;
-    }
-
     list.addAll(Directory(path).listSync());
-
     list.forEach((item) {
       final itemType = p.extension(item.path);
       if (itemType == '.png') {
