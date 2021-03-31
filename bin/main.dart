@@ -10,7 +10,7 @@ void main() async {
   messenger.printInitial();
   var path = messenger.writePath();
   while (repeat) {
-    mediaGallery.getFilesFromPath(path);
+    await mediaGallery.getFilesFromPath(path);
 
     messenger.printOptions();
     var option = messenger.writeOption();
@@ -19,9 +19,7 @@ void main() async {
 
     messenger.printRepeat();
     repeat = messenger.writeRepeat();
-    mediaGallery.jpgList.clear();
-    mediaGallery.pngList.clear();
-    mediaGallery.list.clear();
+    mediaGallery.clear();
   }
 
   exitCode = 1;

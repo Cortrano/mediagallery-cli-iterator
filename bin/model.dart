@@ -6,7 +6,9 @@ abstract class Image {
   double size;
   int heigth;
   int width;
-  Type type;
+  String name;
+
+  String showDetails();
 }
 
 class PngImage extends Image {
@@ -14,7 +16,7 @@ class PngImage extends Image {
   int height;
   int width;
   String name;
- 
+
   PngImage({
     this.size,
     this.height,

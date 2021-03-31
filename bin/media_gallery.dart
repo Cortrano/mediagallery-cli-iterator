@@ -1,17 +1,16 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
-
-import 'iterator.dart';
+import 'iterable.dart';
 import 'model.dart';
 
 class MediaGallery {
   static final MediaGallery _mediaGallery = MediaGallery._internal();
 
   final List<FileSystemEntity> list = [];
-  final List<PngImage> pngList = [];
-  final List<JpgImage> jpgList = [];
+  final ImageCollection<PngImage> pngList = ImageCollection.empty();
+  final ImageCollection<JpgImage> jpgList = ImageCollection.empty();
 
-  void getFilesFromPath(String path) async {
+  void getFilesFromPath(String path) {
     list.addAll(Directory(path).listSync());
     list.forEach((item) {
       final itemType = p.extension(item.path);
@@ -51,20 +50,16 @@ class MediaGallery {
     }
   }
 
-  void listPngFiles(List<PngImage> pngList, {bool details}) {
-    PngIterator pngIterator = PngIterator(pngList);
-    while (pngIterator.hasNext()) {
-      final PngImage image = pngIterator.getNext();
+  void listPngFiles(ImageCollection<PngImage> pngList, {bool details}) {
+    for (var image in pngList) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
     }
   }
 
-  void listJpgFiles(List<JpgImage> jpgList, {bool details}) {
-    JpgIterator jpgIterator = JpgIterator(jpgList);
-    while (jpgIterator.hasNext()) {
-      final JpgImage image = jpgIterator.getNext();
+  void listJpgFiles(ImageCollection<JpgImage> jpgList, {bool details}) {
+    for (var image in jpgList) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
