@@ -2,7 +2,7 @@ import 'dart:io';
 
 class Messenger {
   void printInitial() {
-    stdout.writeln('MediaGallery_CLI 0.1');
+    stdout.writeln('MediaGallery_CLI 0.2');
     stdout.writeln('Print your path with media files:');
   }
 
@@ -17,11 +17,11 @@ class Messenger {
     stdout.writeln('To Exit print "0"');
   }
 
-  String writePath() {
+  String? writePath() {
     return stdin.readLineSync();
   }
 
-  String writeOption() {
+  String? writeOption() {
     return stdin.readLineSync();
   }
 

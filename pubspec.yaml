@@ -1,7 +1,11 @@
 name: cmd_mediagallery
 
+environment: 
+  sdk: ">=2.12.0 <3.0.0"
+
+
 dependencies:
-  args: ^1.5.0
-  exif: ^1.0.3
-  path: ^1.7.0
-  image: ^2.1.19
+  args: ^2.0.0
+  exif: ^2.0.0
+  path: ^1.8.0
+  image: ^3.0.2

@@ -1,38 +1,60 @@
-class ImageCollection<T> extends Iterable<T> {
-  List<T> _images;
+abstract class IIterable<T> {
+  void add(T item);
+  void clear();
 
-  ImageCollection(this._images);
-  ImageCollection.empty() : _images = [];
-
-  void clear() {
-    _images.clear();
-  }
-
-  void add(T item){
-    _images.add(item);
-  }
-
-  @override
-  Iterator<T> get iterator => ImageIterator(_images);
+  List<T> get collection;
+  IIterator get iterator;
 }
 
-class ImageIterator<T> implements Iterator<T> {
-  List<T> _images;
-  int _index = 0;
-  T _current;
+abstract class IIterator<T> {
+  T? _current;
+  bool hasNext();
+  T? getNext();
 
-  ImageIterator(this._images);
+  T? get current => _current;
+}
+
+class ImageCollection<T> implements IIterable<T> {
+  List<T> _collection;
+
+  ImageCollection(this._collection);
+  ImageCollection.empty() : _collection = [];
 
   @override
-  bool moveNext() {
-    if (_index == _images.length) {
-      _current = null;
-      return false;
-    }
-    _current = _images[_index++];
-    return true;
+  void add(T item) {
+    _collection.add(item);
+  }
+
+  void clear() {
+    _collection.clear();
   }
 
   @override
-  T get current => _current;
+  List<T> get collection => _collection;
+
+  @override
+  IIterator<T> get iterator => ImageIterator(_collection);
+}
+
+class ImageIterator<T> implements IIterator<T> {
+  List<T> images = [];
+  int index = 0;
+  T? _current;
+
+  ImageIterator(this.images);
+
+  bool hasNext() {
+    return index < images.length;
+  }
+
+  T? getNext() {
+    if (!hasNext()) {
+      _current = null;
+      return null;
+    }
+    _current = images[index++];
+    return _current;
+  }
+
+  T? get current => _current;
 }

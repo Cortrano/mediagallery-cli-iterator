@@ -8,35 +8,36 @@ class MediaGallery {
 
   final List<FileSystemEntity> list = [];
   final ImageCollection<PngImage> pngList = ImageCollection.empty();
-  final ImageCollection<JpgImage> jpgList = ImageCollection.empty();
+  late final ImageCollection<JpgImage> jpgList = ImageCollection.empty();
 
-  void getFilesFromPath(String path) {
-    list.addAll(Directory(path).listSync());
-    list.forEach((item) {
+  Future? getFilesFromPath(String? path) async {
+    list.addAll(Directory(path ?? '').listSync());
+    list.forEach((item) async {
       final itemType = p.extension(item.path);
       if (itemType == '.png') {
         var pngImage = PngImage.fromFileSystemEntity(item);
         pngList.add(pngImage);
       } else if (itemType == '.jpg') {
-        var jpgItem = JpgImage.fromFileSystemEntity(item);
+        var jpgItem = await JpgImage.fromFileSystemEntity(item);
         jpgList.add(jpgItem);
+        print(jpgItem.orientation);
       }
     });
   }
 
-  void proceedOption(String option) {
+  void proceedOption(String? option) {
     switch (option) {
       case '1':
         listAllFiles(list);
         break;
       case '2':
-        listPngFiles(pngList, details: false);
+        listPngFiles(pngList);
         break;
       case '2 -d':
         listPngFiles(pngList, details: true);
         break;
       case '3':
-        listJpgFiles(jpgList, details: false);
+        listJpgFiles(jpgList);
         break;
       case '3 -d':
         listJpgFiles(jpgList, details: true);
@@ -50,16 +51,16 @@ class MediaGallery {
     }
   }
 
-  void listPngFiles(ImageCollection<PngImage> pngList, {bool details}) {
-    for (var image in pngList) {
+  void listPngFiles(ImageCollection<PngImage> pngList, {bool details = false}) {
+    for (var image in pngList.collection) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
     }
   }
 
-  void listJpgFiles(ImageCollection<JpgImage> jpgList, {bool details}) {
-    for (var image in jpgList) {
+  void listJpgFiles(ImageCollection<JpgImage> jpgList, {bool details = false}) {
+    for (var image in jpgList.collection) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
