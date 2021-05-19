@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'media_gallery.dart';
+import 'package:cmd_mediagallery/media_gallery.dart';
+
 import 'messenger.dart';
 
-void main() async {
+void main(List<String> arguments) async {
   MediaGallery mediaGallery = MediaGallery();
   Messenger messenger = Messenger();
   bool repeat = true;
@@ -10,7 +11,7 @@ void main() async {
   messenger.printInitial();
   var path = messenger.writePath();
   while (repeat) {
-    await mediaGallery.getFilesFromPath(path);
+    mediaGallery.getFilesFromPath(path);
 
     messenger.printOptions();
     var option = messenger.writeOption();
@@ -19,7 +20,9 @@ void main() async {
 
     messenger.printRepeat();
     repeat = messenger.writeRepeat();
-    mediaGallery.clear();
+    mediaGallery.jpgList.clear();
+    mediaGallery.pngList.clear();
+    mediaGallery.list.clear();
   }
 
   exitCode = 1;

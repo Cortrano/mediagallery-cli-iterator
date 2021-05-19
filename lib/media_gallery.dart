@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
+
 import 'iterable.dart';
 import 'model.dart';
 
@@ -7,37 +8,43 @@ class MediaGallery {
   static final MediaGallery _mediaGallery = MediaGallery._internal();
 
   final List<FileSystemEntity> list = [];
-  final ImageCollection<PngImage> pngList = ImageCollection.empty();
-  late final ImageCollection<JpgImage> jpgList = ImageCollection.empty();
+  final pngList = ImagesCollection<PngImage>();
+  final jpgList = ImagesCollection<JpgImage>();
 
-  Future? getFilesFromPath(String? path) async {
-    list.addAll(Directory(path ?? '').listSync());
-    list.forEach((item) async {
+  void getFilesFromPath(String path) async {
+    if (await FileSystemEntity.isFile(path)) {
+      stderr.writeln('error: $path is a file, please provide a directory');
+    } else {
+      exitCode = 2;
+    }
+
+    list.addAll(Directory(path).listSync());
+
+    list.forEach((item) {
       final itemType = p.extension(item.path);
       if (itemType == '.png') {
         var pngImage = PngImage.fromFileSystemEntity(item);
         pngList.add(pngImage);
       } else if (itemType == '.jpg') {
-        var jpgItem = await JpgImage.fromFileSystemEntity(item);
+        var jpgItem = JpgImage.fromFileSystemEntity(item);
         jpgList.add(jpgItem);
-        print(jpgItem.orientation);
       }
     });
   }
 
-  void proceedOption(String? option) {
+  void proceedOption(String option) {
     switch (option) {
       case '1':
         listAllFiles(list);
         break;
       case '2':
-        listPngFiles(pngList);
+        listPngFiles(pngList, details: false);
         break;
       case '2 -d':
         listPngFiles(pngList, details: true);
         break;
       case '3':
-        listJpgFiles(jpgList);
+        listJpgFiles(jpgList, details: false);
         break;
       case '3 -d':
         listJpgFiles(jpgList, details: true);
@@ -51,20 +58,20 @@ class MediaGallery {
     }
   }
 
-  void listPngFiles(ImageCollection<PngImage> pngList, {bool details = false}) {
-    for (var image in pngList.collection) {
+  void listPngFiles(IIterable<PngImage> pngList, {bool details = false}) {
+    pngList.forEach((image) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
-    }
+    });
   }
 
-  void listJpgFiles(ImageCollection<JpgImage> jpgList, {bool details = false}) {
-    for (var image in jpgList.collection) {
+  void listJpgFiles(IIterable<JpgImage> jpgList, {bool details = false}) {
+    jpgList.forEach((image) {
       details
           ? stdout.writeln(image.showDetails())
           : stdout.writeln(image.name);
-    }
+    });
   }
 
   void clear() {

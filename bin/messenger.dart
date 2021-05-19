@@ -17,12 +17,12 @@ class Messenger {
     stdout.writeln('To Exit print "0"');
   }
 
-  String? writePath() {
-    return stdin.readLineSync();
+  String writePath() {
+    return stdin.readLineSync() ?? '';
   }
 
-  String? writeOption() {
-    return stdin.readLineSync();
+  String writeOption() {
+    return stdin.readLineSync() ?? '';
   }
 
   bool writeRepeat() {
